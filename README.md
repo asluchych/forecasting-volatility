@@ -1,1 +1,1 @@
-# forecasting-volatility
+# Forecasting volatility with neural networks
