@@ -2,14 +2,14 @@
 
 Project for the course Multivariate Statistical Methods and Application
 
-Folders:
+## Folders:
 
 presentation01: theoretical part
 
 presentation02: application
 
 
-Notebooks:
+## Notebooks:
 
 prices_hour_to_rv: use hourly stock price data to obtain daily volatility
 
