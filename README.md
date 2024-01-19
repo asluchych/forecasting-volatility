@@ -25,7 +25,7 @@ realized volatilty:
 - hourly closing price
 - intraday returns: log difference
 - overnight information excluded
-- 
+- missing data filled with previous observation
 
 
 
