@@ -2,8 +2,18 @@
 
 Project for the course Multivariate Statistical Methods and Application
 
-presentation01: theoretical part
-presentation02: application
+## Folders:
+
+presentation01: slides for presentation of theoretical part
+
+presentation02: slides for presentation of application
+
+
+## Notebooks:
+
+prices_hour_to_rv: use hourly stock price data to obtain daily volatility
+
+
 
 daily data:
 - 11.01.2023 - 10.01.2024
@@ -15,7 +25,7 @@ realized volatilty:
 - hourly closing price
 - intraday returns: log difference
 - overnight information excluded
-- 
+- missing data filled with previous observation
 
 
 
