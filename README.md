@@ -2,8 +2,17 @@
 
 Project for the course Multivariate Statistical Methods and Application
 
+Folders:
+
 presentation01: theoretical part
+
 presentation02: application
+
+
+Notebooks:
+prices_hour_to_rv: use hourly stock price data to obtain daily volatility
+
+
 
 daily data:
 - 11.01.2023 - 10.01.2024
