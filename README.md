@@ -4,9 +4,9 @@ Project for the course Multivariate Statistical Methods and Application
 
 ## Folders:
 
-presentation01: theoretical part
+presentation01: slides for presentation of theoretical part
 
-presentation02: application
+presentation02: slides for presentation of application
 
 
 ## Notebooks:
