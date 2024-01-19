@@ -1,5 +1,10 @@
 # Forecasting volatility with neural networks
 
+Project for the course Multivariate Statistical Methods and Application
+
+presentation01: theoretical part
+presentation02: application
+
 daily data:
 - 11.01.2023 - 10.01.2024
 - top 100 components of S&P 500 index
