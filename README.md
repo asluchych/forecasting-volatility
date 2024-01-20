@@ -19,13 +19,13 @@ prices_daily_to_rv: use daily stock price data to calculate rolling standard dev
 
 
 
-daily data:
+# daily data:
 - 11.01.2023 - 10.01.2024
 - top 100 components of S&P 500 index
 - 251 days
 - 25 100 observations
 
-realized volatilty:
+# realized volatilty:
 - hourly closing price
 - intraday returns: log difference
 - overnight information excluded
