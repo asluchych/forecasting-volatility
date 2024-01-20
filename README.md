@@ -15,6 +15,8 @@ get_data: fetch data from EIKON
 
 prices_hour_to_rv: use hourly stock price data to obtain daily volatility
 
+prices_daily_to_rv: use daily stock price data to calculate rolling standard deviation of daily returns
+
 
 
 daily data:
