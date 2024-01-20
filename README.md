@@ -11,6 +11,8 @@ presentation02: slides for presentation of application
 
 ## Notebooks:
 
+get_data: fetch data from EIKON
+
 prices_hour_to_rv: use hourly stock price data to obtain daily volatility
 
 
@@ -29,11 +31,9 @@ realized volatilty:
 
 
 
-- 02.01.2013 - 29.12.2023
+Daily stock prices:
+- January 2013 - December 2023
 - 98 stocks: dropped GOOG.O, UBER.K
-- 2768 days
-- 271264 observations
-+ market volume
 
 - LeakyReLU activations
 - batch normalization
