@@ -32,8 +32,11 @@ realized volatilty:
 
 
 Daily stock prices:
-- January 2013 - December 2023
-- 97 stocks: dropped GOOG.O, ABBV.K, UBER.K
+- 2013 - 2023
+- top 97 components of S&P 500 index: dropped GOOG.O, ABBV.K, UBER.K
+- 2768 days
+- 268 496 observations
+- rolling standard deviation of daily returns
 
 - LeakyReLU activations
 - batch normalization
