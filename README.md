@@ -33,7 +33,7 @@ realized volatilty:
 
 Daily stock prices:
 - January 2013 - December 2023
-- 98 stocks: dropped GOOG.O, UBER.K
+- 97 stocks: dropped GOOG.O, ABBV.K, UBER.K
 
 - LeakyReLU activations
 - batch normalization
