@@ -1,0 +1,405 @@
+
+%-------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%-------------------------------------------------------------------
+
+%\documentclass{beamer}
+\documentclass[handout]{beamer}
+
+\mode<presentation> {
+\usetheme{CambridgeUS}
+}
+\usecolortheme{seahorse}
+\setbeamertemplate{itemize items}[circle]
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\setbeamertemplate{footline}
+{%
+  \leavevmode%
+  \hbox{%
+   \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.50\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\ifblank\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+ 
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,leftskip=2ex,rightskip=2ex,sep=0pt]{date in head/foot}%
+    \hfill%
+    \usebeamerfont{date in head/foot}%
+    \insertshortdate{}%
+    \hfill%
+    \usebeamercolor[fg]{page number in head/foot}%
+    \usebeamerfont{page number in head/foot}%
+    \usebeamertemplate{page number in head/foot}%
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{neuralnetwork}
+\usepackage{booktabs,caption}
+\usepackage[flushleft]{threeparttable}
+\usepackage{tikz}
+\usetikzlibrary{positioning,chains}
+\usepackage{caption}
+\setbeamertemplate{caption}[numbered]
+\usepackage{yhmath}
+\usepackage{wrapfig}
+\usepackage{appendixnumberbeamer} 
+\usepackage{tabularx}
+
+\newcommand{\Sum} [2] {\the\numexpr #1 + #2 \relax \\}
+%-------------------------------------------------------------------
+%	TITLE PAGE
+%-------------------------------------------------------------------
+
+\title[Forecasting Volatility]{Forecasting Volatility: An Application} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Multivariate Statistical Methods and Applications} % Your name
+\institute[] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+\medskip
+\text{Anatol Sluchych} % Your email address
+}
+
+\date{January 25, 2024} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+%-------------------------------------------------------------------
+\begin{frame}
+\frametitle{Outline} 
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%-------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%-------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Recap: Artificial Neural Networks}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Multilayer Perceptron}
+\begin{itemize}
+    \item  \textit{uni-directional} feedforward neural network
+\end{itemize}
+
+\vspace{5mm}
+
+\begin{neuralnetwork}[height=5]
+\newcommand{\x}[2]{$RV_{t-#2}$}
+\newcommand{\y}[2]{$g(RV)$}
+\newcommand{\hone}[2]{$A^{(1)}_#2$}
+\newcommand{\htwo}[2]{$A^{(2)}_#2$}
+\newcommand{\w}[4]{$w_{#2#4}$}
+\newcommand{\B}[4]{$\beta_#2$}
+\newcommand{\naught}[4]{}
+\newcommand{\nodetexty}[2]{$\widehat{RV}_t$}
+\setdefaultlinklabel{\naught}
+\inputlayer[count=4, bias=false, title=Input\\layer, text=\x]
+\hiddenlayer[count=5, bias=false, title=Hidden\\layer 1, text=\hone]
+\linklayers
+\hiddenlayer[count=4, bias=false, title=Hidden\\layer 2, text=\htwo]
+\linklayers
+\outputlayer[count=1, title=Output\\layer,  text=\y] 
+\linklayers
+\outputlayer[count=1, nodeclass={input neuron}, title=\nodetexclear, text=\nodetexty]  
+\linklayers
+\end{neuralnetwork}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Recurrent Neural Networks}
+
+\begin{tikzpicture}[item/.style={circle,draw,thick,align=center},
+itemc/.style={item,on chain,join}, scale=0.8]
+ \begin{scope}[start chain=going right,nodes=itemc,every
+ join/.style={-latex,very thick},local bounding box=chain]
+ \path node (A1) {$A_1$} node (A2) {$A_2$} node (A3) {$A_3$} node[xshift=2em] (AT)
+ {$A_T$};
+ \end{scope}
+ \node[left=1em of chain,scale=2] (eq) {$=$};
+ \node[left=2em of eq,item] (AF) {$A_t$};
+ \path (AF.west) ++ (-1em,2em) coordinate (aux);
+ \draw[very thick,-latex,rounded corners, red] (AF.east)  -| ++ (1em,2em) -- (aux)  
+ |-   node[left, pos=.3] {U} (AF.west);
+
+
+ \foreach \X in {1,2,3} 
+ {\draw[very thick,-latex] (A\X.north) -- ++ (0,2em)
+ node[above,item,fill=gray!10] (h\X)   {$\widehat{RV}_{\Sum {\X} {1}}$};
+ \draw[very thick,latex-] (A\X.south) -- ++ (0,-2em)
+ node[below,item,fill=gray!10] (x\X) {$RV_\X$};}
+
+\draw[very thick,-latex] (AT.north) -- ++ (0,2em)
+ node[above,item,fill=gray!10]  (hT)   {$\widehat{RV}_{\tiny{T+1}}$};
+ \draw[very thick,latex-] (AT.south) -- ++ (0,-2em)
+ node[below,item,fill=gray!10] (xT) {$RV_{T}$};
+
+ \draw[white,line width=0.8ex] (AF.north) -- ++ (0,1.9em);
+ \draw[very thick,-latex]  (AF.north) -- ++  (0,2em) 
+ node[above,item,fill=gray!10] {$\widehat{RV}_{t+1}$};
+ \draw[very thick,latex-] (AF.south) -- ++ (0,-2em) 
+ node[below,item,fill=gray!10]  {$RV_t$};
+ \path (x3) -- (xT) node[midway,scale=2,font=\bfseries] {\dots};
+\end{tikzpicture}
+
+
+\begin{itemize}
+    \item \textit{bi-directional} neural network with  feedback loops
+    \pause
+    \item long short-term memory:
+        \begin{itemize}
+            \item RNN extension
+            \item LSTM cells
+        \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+
+%------------------------------------------------
+\section{Forecasting Volatility with Neural Networks}
+%------------------------------------------------
+
+\begin{frame}
+\label{data}
+\frametitle{Data}
+Daily data:
+\begin{itemize}
+    \item 11.01.2023 - 10.01.2024
+    \item top 100 components of S\&P 500 index \\ 
+    \hyperlink{sector}{\beamerbutton{Sector Composition}}
+    \item 251 days
+    \item 25 100 observations
+\end{itemize}
+\vspace{5mm}
+Realized volatility:
+\begin{itemize}
+    \item hourly closing price
+    \item missing data filled with previous observation
+    \item returns: price log difference
+    \item $\mathrm{RV}_{i, t}^{(h)}:=  \displaystyle\sum_{s=t-h+1}^t r_{i, s}^2 $, for period  $[t-h, t]$
+    \item overnight information excluded
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Model Comparison}
+
+\begin{table}
+\caption{\label{table01}Out-of-sample performance}
+\begin{tabular}{|lll|}
+\hline \hline 
+Model  \hspace{20mm} &  MSE \hspace{5mm} & QLIKE \\ 
+\hline \hline 
+Random Walk & & \\
+VAR & & \\
+MLP & & \\
+LSTM & & \\
+\hline
+
+\end{tabular}
+\end{table}
+
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+
+
+\bibitem[Bucci, 2020]{p1} Bucci, Andrea (2020).
+\newblock Realized Volatility Forecasting with Neural Networks.
+\newblock \emph{Journal of Financial Econometrics 18}, 502-531.
+
+
+\bibitem[Hastie, 2009]{p1} Hastie, Trevor, Robert Tibshirani, Jerome H. Friedman, and Jerome H. Friedman (2009).
+\newblock  The Elements of Statistical Learning: Data Mining, Inference, and Prediction.
+\newblock \emph{Springer Science \& Business Media}.
+
+
+\bibitem[James, 2021]{p1} James, Gareth, Daniela Witten, Trevor  Hastie, and Robert Tibshirani (2021).
+\newblock  An Introduction to Statistical Learning: with Applications in R (Second Edition).
+\newblock \emph{Springer Science \& Business Media}.
+
+\bibitem[Zhang, 2023]{p1} Zhang,  Chao, Yihuang Zhang, Mihai Cucuringu, and Zhongmin Qian (2023).
+\newblock Volatility Forecasting with Machine Learning and Intraday Commonality.
+\newblock \emph{Journal of Financial Econometrics}, forthcoming.
+
+\end{thebibliography}
+}
+\end{frame}
+
+\appendix
+\begin{frame}
+\label{sector}
+\frametitle{Stock Sector Division}
+
+\begin{table}
+\caption{\label{table01}Components in each sector according to TRBC Sector Classification}
+\scriptsize	
+\begin{tabularx}{\textwidth}{llX}
+\hline
+ Sector & Number & Tickers  \\ [0.5ex] 
+ \hline
+ Technology & 32 & AAPL ACN ADBE  ADI ADP AMAT AMD AVGO \mbox{CMCSA} CRM CSCO GOOGL GOOG IBM INTC INTU LRCX MA META MSFT NFLX NOW NVDA ORCL PANW QCOM T TMUS TXN UBER V VZ  \\ 
+ Healthcare & 19 & ABBV ABT AMGN BMY CVS DHR ELV GILD ISRG JNJ LLY MDT MRK PFE REGN SYK TMO UNH VRTX  \\
+ Financials & 13 & AXP BAC BLK BX C CB GS JPM MMC MS PGR SCHW WFC \\
+ Consumer Cyclicals & 11 & AMZN BKNG COST DIS HD LOW MCD NKE SBUX TSLA TJX  \\
+Consumer Non-Cyclicals & 9 & BRKb GE HON KO MDLZ PEP PG PM WMT  \\ 
+ Industrials & 9 & BA CAT DE ETN LMT RTX SPGI UNP UPS  \\ 
+ Others & 7 & AMT COP CVX LIN NEE PLD XOM  \\[1ex] 
+ \hline
+\end{tabularx}%
+\end{table}
+\hyperlink{data}{\beamerbutton{Back}}
+\end{frame}
+
+
+
+
+%------------------------------------------------
+
+\end{document}
+
+
+\begin{frame}
+\frametitle{Model Comparison}
+\begin{itemize}
+\item data: top 93 stocks of S\&P 500
+\pause
+\item period: July 1, 2011 to June 30, 2021
+\pause
+\item pooled past intraday and daily RVs to forecast daily RVs:
+\small
+\mathrm{RV}_{i, t+1}^{(d)}=F_i\left(\mathrm{RV}_{i, t}^{(h)}, \ldots, \mathrm{RV}_{i, t-(p-1) b}^{(h)}, \mathrm{RV}_{i, t-1}^{(d)}, \ldots, \mathrm{RV}_{i, t-(p-1)}^{(d)} ; \theta\right)+\epsilon_{i, t+1}$
+\normalsize
+\item QLIKE loss function for comparison (Patton and
+Sheppard 2009)
+\pause
+\item pooled data of all stocks and a proxy for overall market volatility
+\pause
+\item  rolling window estimation based on normalized observations in the last 21 days
+\end{itemize}
+\end{frame}
+
+\bibitem[Engle, 2012]{p1} Engle, Robert F., and Magdalena E. Sokalska. 2012.
+\newblock Forecasting Intraday Volatility in the US
+Equity Market: Multiplicative Component GARCH.
+\newblock \emph{Journal of Financial Econometrics} 10: 54–83.
+
+\begin{neuralnetwork}[height=2, layerspacing=20mm] 
+\newcommand{\x}[2]{$RV_#2$}
+\newcommand{\y}[2]{$f(RV)$}
+\newcommand{\hone}[2]{$A^{(1)}_#2$}
+\newcommand{\htwo}[2]{$A^{(2)}_#2$}
+\newcommand{\w}[4]{$w_{#2#4}$}
+\newcommand{\B}[4]{$\beta_#2$}
+\newcommand{\recurrence}[4]{$Recurrence$}
+\newcommand{\naught}[4]{}
+\newcommand{\nodetexty}[2]{$\widehat{RV}_5$}
+\setdefaultlinklabel{\naught}
+\inputlayer[count=4, bias=false, title=, text=\x]
+\hiddenlayer[count=2, bias=false, title=, text=\hone]
+\linklayers
+\hiddenlayer[count=2, bias=false, title=, text=\htwo]
+
+\foreach \n in {1,...,2}{
+    \foreach \m in {1,2}{
+        \link[style={}, labelpos=near start, from layer=1, from node=\n, to layer=2, to node=\m]
+    }
+}
+
+
+\link[style={very thick, dotted, draw=magenta!60}, labelpos=near end, from layer=2, from node=1, to layer=1, to node=1]
+
+
+\setdefaultlinklabel{\naught}
+\outputlayer[count=1, title=,  text=\y] 
+\linklayers
+\outputlayer[count=1, nodeclass={input neuron}, title=\nodetexclear, text=\nodetexty]  
+\linklayers
+\end{neuralnetwork}
+
+
+
+
+
+
+
+%-------------------------------------------------------------------
+\section{Why Forecasting Volatility?} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%-------------------------------------------------------------------
+
+
+\begin{frame}
+\frametitle{Forecasting Stock Return Volatility}
+
+Applications:
+\begin{itemize}
+\item risk management
+\pause
+\item derivative pricing
+\pause
+\item devising trading strategies
+\end{itemize}
+
+\vspace{15mm}
+\pause
+
+Realized volatility (RV) as proxy for unobserved volatility:
+$\mathrm{RV}_{i, t}^{(h)}:=  \displaystyle\sum_{s=t-h+1}^t r_{i, s}^2 $, for period 
+$[t-h, t]$
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Model Comparison}
+
+\begin{table}
+\begin{threeparttable}
+\caption{\label{table01}Models' out-of-sample performance (QLIKE loss function).}
+\begin{tabular}{|llll|}
+\hline \hline 
+\multirow{2}{*}{Model \hspace{23mm}} & \multicolumn{3}{c|}{Intraday  Volatility Frequency} \\ 
+ & \multicolumn{1}{l}{10-min} \hspace{6mm} & \multicolumn{1}{l}{30-min} \hspace{6mm} & 60-min \\ \hline \hline  
+HAR & \multicolumn{1}{l}{0.197} & \multicolumn{1}{l}{0.187} & 0.186 \\ 
+OLS & \multicolumn{1}{l}{0.186} & \multicolumn{1}{l}{0.187} & 0.186\\ 
+LASSO & \multicolumn{1}{l}{0.191} & \multicolumn{1}{l}{0.187} & 0.186\\
+XGBoost & \multicolumn{1}{l}{0.177} & \multicolumn{1}{l}{0.173} & 0.173 \\ 
+NN (MLP) & \multicolumn{1}{l}{{\color[HTML]{009901} 0.171}} & \multicolumn{1}{l}{{\color[HTML]{009901} 0.171}} &  0.172\\ 
+NN (LSTM) & \multicolumn{1}{l}{0.174} & \multicolumn{1}{l}{{\color[HTML]{009901} 0.171}} &  {\color[HTML]{009901} 0.171} \\ \hline
+\end{tabular}
+    \begin{tablenotes}
+      {\scriptsize
+      \item Source: Zhang et al. (2023). MPL: 3 hidden layers, LSTM: 2 hidden layers.}
+    \end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{itemize}
+\item neural networks (multilayer perceptron and long short-term memory) yield superior forecasts
+
+
+\end{itemize}
+\end{frame}
