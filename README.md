@@ -19,26 +19,21 @@ prices_daily_to_rv: use daily stock price data to calculate rolling standard dev
 
 
 
-### Daily data:
-- 11.01.2023 - 10.01.2024
-- top 100 components of S&P 500 index
-- 251 days
-- 25 100 observations
 
-#### Realized volatilty:
-- hourly closing price
-- intraday returns: log difference
-- overnight information excluded
-- missing data filled with previous observation
+
 
 
 
 ### Daily stock prices:
-- 2013 - 2023
-- top 97 components of S&P 500 index: dropped GOOG.O, ABBV.K, UBER.K
-- 2768 days
-- 268 496 observations
-- rolling standard deviation of daily returns
+- 01.2013 - 12.2023
+- 97  components of S&P 100 index: dropped KHC.OQ (Kraft Heinz Co), DOW.N (Dow Inc), GOOG.OQ (Alphabet Inc., class C), PYPL.OQ (PayPal Holdings Inc
+- no missing data
+- 2769 trading days * 97 = 268593 observations
+- 
+#### Realized volatilty:
+- daily returns:  log difference
+- monthly realized volatility: sum of squared daily returns in a month
+- 137 months * 97 = 12804 observations
 
 - LeakyReLU activations
 - batch normalization
